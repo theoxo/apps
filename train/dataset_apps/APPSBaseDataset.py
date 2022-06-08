@@ -58,9 +58,12 @@ class APPSBaseDataset(torch.utils.data.Dataset):
 
         print(f"Loading {len(self.problem_dirs)} problems from {self.dataroot}.")
         for problem_name in tqdm(self.problem_dirs):
-            question_fname = os.path.join(self.dataroot, problem_name, "question.txt")
-            sols_fname = os.path.join(self.dataroot, problem_name, "solutions.json")
-            starter_code = os.path.join(self.dataroot, problem_name, "starter_code.py")
+            #question_fname = os.path.join(self.dataroot, problem_name, "question.txt")
+            #sols_fname = os.path.join(self.dataroot, problem_name, "solutions.json")
+            #starter_code = os.path.join(self.dataroot, problem_name, "starter_code.py")
+            question_fname = os.path.join("..", problem_name, "question.txt")
+            sols_fname = os.path.join("..", problem_name, "solutions.json")
+            starter_code = os.path.join("..", problem_name, "starter_code.py")
 
             # print(question_fname)
 
@@ -96,7 +99,7 @@ class APPSBaseDataset(torch.utils.data.Dataset):
                     else:
                         all_samples_dict[question_str] = [sample]
         
-        print(f"Loaded {len(all_samples)} saamples from {self.dataroot}.")
+        print(f"Loaded {len(all_samples)} samples from {self.dataroot}.")
         print(f"Skipped {len(skipped_problems)} problems from {self.dataroot}.")
         self.samples = all_samples
         self.samples_dict = all_samples_dict

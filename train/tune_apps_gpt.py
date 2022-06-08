@@ -116,17 +116,18 @@ def run_training(args, train_data):
 
 def get_dataset(args): 
     
-    fnames = os.listdir(args.apps_train_files)
- 
-    train_data = APPSBaseDataset(
-        dataroot=args.apps_dataroot, 
-        problem_dirs=fnames,
-        mode=args.arch, 
-        max_tokens=2048 if ('EleutherAI' in args.arch or '2700' in args.load) else 1024,
-        sample_mode=args.apps_sample_mode
-    )
+    with open(args.apps_train_files, 'rb') as inf:
+        fnames = json.load(inf)#os.listdir(args.apps_train_files)
+     
+        train_data = APPSBaseDataset(
+            dataroot=args.apps_dataroot, 
+            problem_dirs=fnames,
+            mode=args.arch, 
+            max_tokens=2048 if ('EleutherAI' in str(args.arch) or '2700' in str(args.load)) else 1024,
+            sample_mode=args.apps_sample_mode
+        )
 
-    return train_data
+        return train_data
 
 
 def main(args):
@@ -149,14 +150,14 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Language Modelling on Code")
-    parser.add_argument('--arch', default='gpt2', choices=transformers.GPT2_PRETRAINED_MODEL_ARCHIVE_LIST + ["EleutherAI/gpt-neo-2.7B"])
+    parser.add_argument('--arch', default='gpt2', choices=transformers.GPT2_PRETRAINED_MODEL_ARCHIVE_LIST + ["EleutherAI/gpt-neo-2.7B", "EleutherAI/gpt-neo-125M"])
     parser.add_argument('--dummy-model', action='store_true')
     parser.add_argument('--load', default=None, type=str)
     parser.add_argument('--resume', default=None, type=str)
 
     # Dataloading
-    parser.add_argument('--apps-dataroot', default='../apps/', type=str)
-    parser.add_argument('--apps-train-files', default='../apps/data_split/train.json', type=str)
+    parser.add_argument('--apps-dataroot', default='../APPS/', type=str)
+    parser.add_argument('--apps-train-files', default='../APPS/data_split/train.json', type=str)
     parser.add_argument('--apps-sample-mode', default='uniform_sol')
     
     # Training
